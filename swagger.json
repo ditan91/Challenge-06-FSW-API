@@ -2,8 +2,8 @@
     "swagger": "2.0",
     "info": {
       "version": "1.0.0",
-      "title": "Instagram API",
-      "description": "Instagram API Clone DOCS",
+      "title": "Cars API",
+      "description": "Challenge 06",
       "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"

@@ -29,10 +29,10 @@ app.get("/auth/me", middleware.authenticate, authController.currUser);
 
 // Product
 app.get("/api/car", middleware.authenticate, carController.getAll)
-app.get("/api/car/:id", middleware.authenticate, carController.getCarsByID)
-app.post("/api/car", middleware.authenticate, upload.single("photo"),carController.create)
-app.put("/api/car/:id", middleware.authenticate, carController.updateByID)
-app.delete("/api/car/:id", middleware.authenticate, carController.deleteByID)
+app.get("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.getCarsByID)
+app.post("/api/car", middleware.authenticate, middleware.isAdmin, upload.single("photo"),carController.create)
+app.put("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.updateByID)
+app.delete("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.deleteByID)
 
 app.listen(process.env.PORT || 9000, () => {
   console.log(

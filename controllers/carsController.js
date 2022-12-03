@@ -1,13 +1,13 @@
 const carsService = require("../services/carsService");
 
 const create = async (req, res, next) => {
-  const { name, price, size} = req.body;
+  const { name, price, size } = req.body;
   const { status, status_code, message, data } = await carsService.create({
-    // id,
     name,
     price,
     size,
-    photo: req.file
+    photo: req.file,
+    createdBy: req.user.id,
   });
 
   res.status(status_code).send({
@@ -15,16 +15,16 @@ const create = async (req, res, next) => {
     message: message,
     data: data,
   });
-  
 };
 
 const deleteByID = async (req, res, next) => {
   const { id } = req.params;
 
-//   const user_id = req.user.id;
+  //   const user_id = req.user.id;
 
   const { status, status_code, message, data } = await carsService.deleteByID({
-    id
+    id,
+    deletedBy: req.user.id,
   });
 
   res.status(status_code).send({
@@ -36,16 +36,17 @@ const deleteByID = async (req, res, next) => {
 
 const updateByID = async (req, res, next) => {
   const { id } = req.params;
-  const { name, price, size} = req.body;
+  const { name, price, size } = req.body;
 
-//   const user_id = req.user.id;
+  //   const user_id = req.user.id;
 
   const { status, status_code, message, data } = await carsService.updateByID({
     id,
     name,
     price,
     size,
-    photo: req.uploaded_picture
+    photo: req.uploaded_picture,
+    updatedBy: req.user.id
   });
 
   res.status(status_code).send({
@@ -55,27 +56,25 @@ const updateByID = async (req, res, next) => {
   });
 };
 const getCarsByID = async (req, res, next) => {
-    const { id } = req.params;
-  
-    const { status, status_code, message, data } =
-      await carsService.getCarsByID({
-        id,
-      });
-  
-    res.status(status_code).send({
-      status: status,
-      message: message,
-      data: data,
-    });
+  const { id } = req.params;
+
+  const { status, status_code, message, data } = await carsService.getCarsByID({
+    id,
+  });
+
+  res.status(status_code).send({
+    status: status,
+    message: message,
+    data: data,
+  });
 };
 const getAll = async (req, res, next) => {
-  
-    const { status, status_code, message, data } = await carsService.getAll();
-  
-    res.status(status_code).send({
-      status: status,
-      message: message,
-      data: data,
-    });
+  const { status, status_code, message, data } = await carsService.getAll();
+
+  res.status(status_code).send({
+    status: status,
+    message: message,
+    data: data,
+  });
 };
-module.exports = { create, updateByID, deleteByID, getCarsByID, getAll};
+module.exports = { create, updateByID, deleteByID, getCarsByID, getAll };

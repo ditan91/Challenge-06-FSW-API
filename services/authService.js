@@ -58,30 +58,52 @@ class authService {
         };
       }
 
-      const getUserByEmail = await userRepository.getUserByEmail({ email });
-    
-      if (!getUserByEmail) {
-        const hashedPass = await bcrypt.hash(password, SALT_ROUND);
-        const createdUser = await userRepository.create({
-          name,
-          role,
-          email,
-          password: hashedPass,
-        });
+      if (role === "user" || role === "superadmin") {
+        const getUserByEmail = await userRepository.getUserByEmail({ email });
 
-        return {
-          status: true,
-          status_code: 201,
-          message: "Berhasil mendaftarkan user",
-          data: {
-            registered_user: createdUser,
-          },
-        };
+        if (!getUserByEmail) {
+          const hashedPass = await bcrypt.hash(password, SALT_ROUND);
+          const createdUser = await userRepository.create({
+            name,
+            role,
+            email,
+            password: hashedPass,
+          });
+          if (role === "user"){
+            return {
+              status: true,
+              status_code: 201,
+              message: "Selamat anda berhasil registrasi",
+              data: {
+                registered_user: createdUser,
+              },
+            };
+          } else if (role === "superadmin"){
+            return {
+              status: true,
+              status_code: 201,
+              message: "Selamat anda berhasil ditambahkan sebagai Superadmin",
+              data: {
+                registered_user: createdUser,
+              },
+            };
+          }
+          
+        } else {
+          return {
+            status: false,
+            status_code: 400,
+            message: "Email sudah digunakan",
+            data: {
+              registered_user: null,
+            },
+          };
+        }
       } else {
         return {
           status: false,
           status_code: 400,
-          message: "Email sudah digunakan",
+          message: "admin hanya bisa ditambahkan oleh superadmin, silahkan login sebagai superadmin",
           data: {
             registered_user: null,
           },
@@ -99,6 +121,109 @@ class authService {
     }
   }
 
+  static async createAdmin({ name, role, email, password }) {
+    try {
+      if (!name) {
+        return {
+          status: false,
+          status_code: 400,
+          message: "Kolom nama tidak boleh kosong",
+          data: {
+            name: null,
+          },
+        };
+      }
+      if (!role) {
+        return {
+          status: false,
+          status_code: 400,
+          message: "Kolom role tidak boleh kosong",
+          data: {
+            role: null,
+          },
+        };
+      }
+      if (!email) {
+        return {
+          status: false,
+          status_code: 400,
+          message: "Kolom email tidak boleh kosong",
+          data: {
+            email: null,
+          },
+        };
+      }
+      if (!password) {
+        return {
+          status: false,
+          status_code: 400,
+          message: "Kolom password tidak boleh kosong",
+          data: {
+            password: null,
+          },
+        };
+      } else if (password.length < 8) {
+        return {
+          status: false,
+          status_code: 400,
+          message: "Password kurang dari 8 karakter",
+          data: {
+            password: "Password kurang dari 8 karakter",
+          },
+        };
+      }
+
+      if (role === "admin") {
+        const getUserByEmail = await userRepository.getUserByEmail({ email });
+
+        if (!getUserByEmail) {
+          const hashedPass = await bcrypt.hash(password, SALT_ROUND);
+          const createdUser = await userRepository.create({
+            name,
+            role,
+            email,
+            password: hashedPass,
+          });
+
+          return {
+            status: true,
+            status_code: 201,
+            message: "Admin berhasil ditambahkan",
+            data: {
+              registered_user: createdUser,
+            },
+          };
+        } else {
+          return {
+            status: false,
+            status_code: 400,
+            message: "Email sudah digunakan",
+            data: {
+              registered_user: null,
+            },
+          };
+        }
+      } else {
+        return {
+          status: false,
+          status_code: 400,
+          message: "role yang anda isi salah",
+          data: {
+            registered_user: null,
+          },
+        };
+      }
+    } catch (error) {
+      return {
+        status: false,
+        status_code: 500,
+        message: error.message,
+        data: {
+          registered_user: null,
+        },
+      };
+    }
+  }
 
   static async login({ email, password }) {
     try {

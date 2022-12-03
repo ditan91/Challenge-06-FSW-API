@@ -21,6 +21,18 @@ module.exports = {
       photo: {
         type: Sequelize.TEXT
       },
+      createdBy: {
+        type: Sequelize.INTEGER
+      },
+      deletedBy: {
+        type: Sequelize.INTEGER
+      },
+      updatedBy: {
+        type: Sequelize.INTEGER
+      },
+      deletedAt: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

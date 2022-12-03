@@ -15,6 +15,21 @@ const register = async (req, res, next) => {
     data: data,
   });
 };
+const registerAdmin = async (req, res, next) => {
+  const { name, role, email, password } = req.body;
+  const { status, status_code, message, data } = await authService.createAdmin({
+    name,
+    role,
+    email,
+    password,
+  });
+
+  res.status(status_code).send({
+    status: status,
+    message: message,
+    data: data,
+  });
+};
 const currUser = async (req, res,next) => {
   const currUser = req.user;
 
@@ -41,4 +56,4 @@ const login = async (req, res) => {
     data: data,
   });
 };
-module.exports = { register, currUser, login}
+module.exports = { register, registerAdmin, currUser, login}

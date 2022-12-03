@@ -22,7 +22,10 @@ const middleware = require("./middlewares/auth");
 // Define Routes
 
 // Auth
-app.post("/auth/register", authController.register);
+//for regis as user or superadmin
+app.post("/auth/register", authController.register); 
+//for add admin by superadmin
+app.post("/auth/addAdmin", middleware.authenticate, middleware.isSuperadmin,authController.registerAdmin);
 app.post("/auth/login", authController.login);
 app.get("/auth/me", middleware.authenticate, authController.currUser);
 

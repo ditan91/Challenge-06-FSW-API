@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// const swaggerUi = require("swagger-ui-express");
+const swaggerUi = require("swagger-ui-express");
 // const swaggerDocument = require("./swagger.json");
+const swaggerJsdoc = require('swagger-jsdoc')
 const cors = require("cors");
 const path = require("path");
 const upload = require("./helpers/fileUpload");
@@ -11,6 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+
+//swagger
+const swaggerOptions = require('./helpers/swaggerOption')
+const swaggerSpec = swaggerJsdoc(swaggerOptions)
 
 // Import Controllers
 const carController = require("./controllers/carsController");
@@ -37,6 +42,8 @@ app.post("/api/car", middleware.authenticate, middleware.isAdmin, upload.single(
 app.put("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.updateByID)
 app.delete("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.deleteByID)
 
+//API doc
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.listen(process.env.PORT || 9000, () => {
   console.log(
     `Server berhasil berjalan di port http://localhost:${

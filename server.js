@@ -36,18 +36,24 @@ app.get("/auth/me", middleware.authenticate, authController.currUser);
 
 
 // Product
-app.get("/api/car", middleware.authenticate, carController.getAll)
-app.get("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.getCarsByID)
-app.post("/api/car", middleware.authenticate, middleware.isAdmin, upload.single("photo"),carController.create)
-app.put("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.updateByID)
-app.delete("/api/car/:id", middleware.authenticate, middleware.isAdmin, carController.deleteByID)
+app.get("/api/cars", middleware.authenticate, carController.getAll)
+app.get("/api/cars/:id", middleware.authenticate, middleware.isAdmin, carController.getCarsByID)
+app.post("/api/cars", middleware.authenticate, middleware.isAdmin, upload.single("photo"),carController.create)
+app.put("/api/cars/:id", middleware.authenticate, middleware.isAdmin, carController.updateByID)
+app.delete("/api/cars/:id", middleware.authenticate, middleware.isAdmin, carController.deleteByID)
+
+// app.get("/api/cars", carController.getAll)
+// app.get("/api/cars/:id", carController.getCarsByID)
+// app.post("/api/cars", upload.single("photo"),carController.create)
+// app.put("/api/cars/:id", carController.updateByID)
+// app.delete("/api/cars/:id", carController.deleteByID)
 
 //API doc
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.listen(process.env.PORT || 9000, () => {
+app.listen(process.env.PORT, () => {
   console.log(
     `Server berhasil berjalan di port http://localhost:${
-      process.env.PORT || 9000
+      process.env.PORT
     }`
   );
 });

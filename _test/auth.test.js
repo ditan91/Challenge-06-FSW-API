@@ -8,7 +8,6 @@ describe("POST /auth/login", () => {
   it("should response with 200 as status code", async () => {
     const rawPassword = "User12345";
     const hashedPassword = await bcrypt.hash(rawPassword, 10);
-
     const payloadCreateUser = {
       name: "User 1",
       role: "user",

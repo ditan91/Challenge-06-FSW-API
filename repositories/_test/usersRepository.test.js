@@ -19,7 +19,7 @@ describe("create users", () => {
     expect(createdusers.password).toEqual(usersToCreate.password);
 
     // Delete Test Data
-    await usersRepository.deleteByID({ id: createdusers.id });
+    await usersRepository.delete({ id: createdusers.id });
   });
 });
 
@@ -34,7 +34,7 @@ describe("get users by id", () => {
     };
 
     const createdusers = await usersRepository.create(usersToCreate);
-    const users = await usersRepository.getByID({ id: createdusers.id });
+    const users = await usersRepository.getUserByID({ id: createdusers.id });
 
     // expect(users.user_id).toEqual(createdusers.user_id); #example
     expect(users.id).toEqual(createdusers.id);
@@ -44,7 +44,7 @@ describe("get users by id", () => {
     expect(users.password).toEqual(createdusers.password);
 
     // Delete Test Data
-    await usersRepository.deleteByID({ id: createdusers.id });
+    await usersRepository.delete({ id: createdusers.id });
   });
 });
 

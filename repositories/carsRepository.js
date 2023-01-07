@@ -1,16 +1,16 @@
 const { Car } = require("../models");
-const cloudinary = require("../helpers/cloudinary");
+// const cloudinary = require("../helpers/cloudinary");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 class CarsRepository {
   static async create({ name, price, size, photo, createdBy }) {
-    const { url } = await cloudinary.upload(photo);
+    // const { url } = await cloudinary.upload(photo);
     const createdCar = await Car.create({
       name,
       price,
       size,
-      photo: url,
+      photo,
       createdBy,
     });
 

@@ -1,4 +1,5 @@
 const carRepository = require("../repositories/carsRepository");
+const cloudinary = require("../helpers/cloudinary");
 
 class CarService {
   static async create({ name, price, size, photo, createdBy }) {
@@ -34,12 +35,13 @@ class CarService {
           //   },
         };
       }
+      const { url } = await cloudinary.upload(photo);
       const createdCar = await carRepository.create({
         // id,
         name,
         price,
         size,
-        photo,
+        photo: url,
         createdBy
       });
 

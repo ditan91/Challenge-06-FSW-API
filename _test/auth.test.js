@@ -27,6 +27,7 @@ describe("POST /auth/login", () => {
       .send(payloadLogin)
       .set("Content-type", "application/json")
       .then((res) => {
+        console.log(res.body.data)
         expect(res.statusCode).toBe(200);
         expect(res._body.data.token).not.toEqual(null);
 
@@ -43,17 +44,16 @@ describe("POST /auth/register", () => {
     const payload = {
       name: "User 2",
       role: "user",
-      email: "user2@gmail.com",
+      email: "user90@gmail.com",
       password: "User12345"
     }
     return request(app)
       .post("/auth/register")
-      .field("name", payload.name)
-      .field("role", payload.role)
-      .field("email", payload.email)
-      .field("password", payload.password)
+      //(.field) untuk ngirim file 
+      .send(payload)
       
       .then((res) => {
+        console.log(res._body.data)
         expect(res.statusCode).toBe(201);
         expect(res._body.data.registered_user).not.toEqual(null);
 
